@@ -1,13 +1,37 @@
+import { Link } from "react-router-dom";
 import GenderCheck from "./GenderCheck";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSignup } from "../../hooks/useSignup";
 
 function Signup() {
+  const { register, handleSubmit, formState } = useForm();
+  const { errors } = formState;
+  const [inputs, setInputs] = useState({
+    fullName: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    gender: "",
+  });
+
+  const { signup, loading } = useSignup();
+  async function onSubmit(inputs) {
+    console.log(inputs);
+    await signup(inputs);
+  }
+
   return (
     <div className="flex justify-center min-w-96 ">
       <div className=" border-2 border-primary rounded-lg p-6 shadow-lg shadow-primary">
         <h1 className="text-primary text-2xl mb-5 text-center">
           Sign in to Chatify
         </h1>
-        <form action="" className="flex flex-col gap-4">
+        <form
+          action=""
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+        >
           <div>
             <label className="input input-bordered input-primary flex items-center gap-2">
               <svg
@@ -18,8 +42,34 @@ function Signup() {
               >
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Full Name" />
+              <input
+                type="text"
+                {...register("fullName", {
+                  required: "This field is required",
+                  pattern: {
+                    value: /^[a-zA-Z]+( [a-zA-Z]+)?$/,
+                    message:
+                      "Only Alphabets allowed and no trailing spaces allowed",
+                  },
+
+                  minLength: {
+                    value: 3,
+                    message: "Full Name must be at least 3 characters",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Max characters reached",
+                  },
+                })}
+                className="grow"
+                placeholder="Full Name"
+              />
             </label>
+            {errors?.fullName?.message && (
+              <p className="w-60 text-wrap my-1  text-sm text-red-600">
+                {errors.fullName.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="input input-bordered input-primary flex items-center gap-2">
@@ -31,8 +81,33 @@ function Signup() {
               >
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
               </svg>
-              <input type="text" className="grow" placeholder="Username" />
+              <input
+                type="text"
+                {...register("username", {
+                  required: "This field is required",
+                  pattern: {
+                    value: /^[a-zA-Z][a-zA-Z0-9_]{3,15}$/,
+                    message: "Invalid Username",
+                  },
+
+                  minLength: {
+                    value: 3,
+                    message: "Username must be at least 3 characters",
+                  },
+                  maxLength: {
+                    value: 15,
+                    message: "Max characters reached",
+                  },
+                })}
+                className="grow"
+                placeholder="Username"
+              />
             </label>
+            {errors?.username?.message && (
+              <p className="w-60 text-wrap my-1  text-sm text-red-600">
+                {errors.username.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -49,8 +124,28 @@ function Signup() {
                   clipRule="evenodd"
                 />
               </svg>
-              <input type="password" placeholder="Password" className="grow" />
+              <input
+                type="password"
+                {...register("password", {
+                  required: "This field is required",
+                  minLength: {
+                    value: 3,
+                    message: "Password must be at least 3 characters",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Max characters reached",
+                  },
+                })}
+                placeholder="Password"
+                className="grow"
+              />
             </label>
+            {errors?.password?.message && (
+              <p className="w-60 text-wrap my-1  text-sm text-red-600">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div>
             <label className="input input-primary input-bordered flex items-center gap-2">
@@ -68,15 +163,24 @@ function Signup() {
               </svg>
               <input
                 type="password"
+                {...register("confirmPassword", {
+                  required: "This field is required",
+                  maxLength: 20,
+                })}
                 placeholder="Confirm Password"
                 className="grow"
               />
             </label>
+            {errors?.confirmPassword?.message && (
+              <p className="w-60 text-wrap my-1  text-sm text-red-600">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
-          <GenderCheck />
-          <a className="link link-primary link-hover text-sm">
+          <GenderCheck register={register} errors={errors} />
+          <Link to="/login" className="link link-primary link-hover text-sm">
             Already have an account?
-          </a>
+          </Link>
           <div className="text-center">
             <button className="btn btn-sm btn-block btn-outline btn-primary">
               Sign Up
