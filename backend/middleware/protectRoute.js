@@ -8,6 +8,7 @@ const protectRoute = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
     if (!decoded) {
       return res.status(401).json({ error: "Invalid token" });
     }
@@ -19,7 +20,9 @@ const protectRoute = async (req, res, next) => {
     next();
   } catch (err) {
     console.log("error in protect route middleware", err.message);
-    res.status(401).json({ error: "Unauthorized" });
+    if (err.message === "jwt expired")
+      res.status(401).json({ error: "Token Expired" });
+    else res.status(401).json({ error: "Unauthorized" });
   }
 };
 export default protectRoute;

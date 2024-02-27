@@ -1,16 +1,28 @@
+import { useEffect } from "react";
+import { useConversationContext } from "../../context/ConversationContext";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
 import { TiMessages } from "react-icons/ti";
 
 function MessageContainer() {
-  const noChatSelected = true;
-  if (noChatSelected) return <NoChatSelected />;
+  const { selectedConversation, setSelectedConversation } =
+    useConversationContext();
+  useEffect(() => {
+    // Cleanup function to reset selected conversation when component unmounts
+    return () => {
+      setSelectedConversation(null);
+    };
+  }, [setSelectedConversation]);
+
+  if (!selectedConversation) return <NoChatSelected />;
   return (
     <div className="flex flex-1 flex-col md:min-w-[450px]">
       <>
         <div className="bg-secondary px-4 py-2 ">
           <span className="label-text">To:</span>
-          <span className="text-gray-900 font-bold">Rohit</span>
+          <span className="text-gray-900 font-bold">
+            {selectedConversation.fullName}
+          </span>
         </div>
         <Messages />
         <MessageInput />

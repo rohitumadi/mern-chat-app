@@ -1,11 +1,13 @@
+import { IoSearchCircleSharp } from "react-icons/io5";
 function SearchInput() {
   return (
-    <form>
+    <form className="flex gap-2 items-center">
       <label className="input input-bordered input-primary flex items-center gap-2">
         <input type="text" className="grow" placeholder="Search" />
-        <kbd className="kbd kbd-sm">⌘</kbd>
-        <kbd className="kbd kbd-sm">K</kbd>
       </label>
+      <button>
+        <IoSearchCircleSharp className="w-10 h-10 text-primary" />
+      </button>
     </form>
   );
 }

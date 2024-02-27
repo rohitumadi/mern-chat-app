@@ -1,46 +1,40 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
-export function useSignup() {
+export function useLogin() {
   const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
-  async function signup(inputs) {
-    let { fullName, username, password, confirmPassword, gender } = inputs;
-    gender = gender[0];
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
+
+  async function login(inputs) {
+    const { username, password } = inputs;
     try {
       setLoading(true);
-      const res = await fetch("/api/auth/signup", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fullName,
           username,
           password,
-          confirmPassword,
-          gender,
         }),
       });
       const data = await res.json();
-      if (res.ok) {
-        toast.success("Account created successfully");
-      } else {
+      if (data.error) {
         toast.error(data.error);
         return;
       }
+      toast.success("Logged in successfully");
       localStorage.setItem("authUser", JSON.stringify(data));
       setAuthUser(data);
-    } catch (err) {
-      toast.error(err.message);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error while logging in", error.message);
+      toast.error("Error while logging in");
     } finally {
       setLoading(false);
     }
   }
-  return { signup, loading };
+  return { loading, login };
 }

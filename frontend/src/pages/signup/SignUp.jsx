@@ -17,7 +17,6 @@ function Signup() {
 
   const { signup, loading } = useSignup();
   async function onSubmit(inputs) {
-    console.log(inputs);
     await signup(inputs);
   }
 
@@ -182,8 +181,15 @@ function Signup() {
             Already have an account?
           </Link>
           <div className="text-center">
-            <button className="btn btn-sm btn-block btn-outline btn-primary">
-              Sign Up
+            <button
+              disabled={loading}
+              className="btn btn-sm btn-block btn-outline btn-primary"
+            >
+              {loading ? (
+                <span className="loading loading-spinner text-primary mr-2"></span>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </div>
         </form>
