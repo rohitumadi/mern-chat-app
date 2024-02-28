@@ -30,10 +30,6 @@ function Login() {
                 type="text"
                 {...register("username", {
                   required: "This field is required",
-                  pattern: {
-                    value: /^[a-zA-Z][a-zA-Z0-9_]{3,15}$/,
-                    message: "Invalid Username",
-                  },
 
                   minLength: {
                     value: 3,

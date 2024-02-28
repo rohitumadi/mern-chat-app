@@ -12,7 +12,7 @@ function MessageInput() {
     setMessage("");
   }
   return (
-    <form className="px-4 my-3" onSubmit={handleSubmit}>
+    <form className="px-4 my-3 mt-auto" onSubmit={handleSubmit}>
       <label className="input input-primary flex items-center gap-2">
         <input
           value={message}
