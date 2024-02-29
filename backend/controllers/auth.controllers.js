@@ -4,7 +4,8 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
   try {
-    const { fullName, username, password, confirmPassword, gender } = req.body;
+    let { fullName, username, password, confirmPassword, gender, profilePic } =
+      req.body;
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords do not match" });
     }
@@ -19,12 +20,16 @@ export const signup = async (req, res) => {
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
+    if (!profilePic) {
+      profilePic = gender === "male" ? boyProfilePic : girlProfilePic;
+    }
+
     const newUser = await User({
       fullName,
       username,
       password: hashPassword,
       gender,
-      profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+      profilePic,
     });
     if (newUser) {
       //generate JWT token

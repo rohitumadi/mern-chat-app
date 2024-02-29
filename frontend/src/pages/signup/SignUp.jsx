@@ -177,6 +177,11 @@ function Signup() {
             )}
           </div>
           <GenderCheck register={register} errors={errors} />
+          <input
+            {...register("profilePic", {})}
+            type="file"
+            className="file-input file-input-sm file-input-bordered file-input-primary w-full max-w-xs"
+          />
           <Link to="/login" className="link link-primary link-hover text-sm">
             Already have an account?
           </Link>

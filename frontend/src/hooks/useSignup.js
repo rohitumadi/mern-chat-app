@@ -1,12 +1,17 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import { convertImgToBinary } from "../utils/convertImgToBinary";
 
 export function useSignup() {
   const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
   async function signup(inputs) {
-    let { fullName, username, password, confirmPassword, gender } = inputs;
+    let { fullName, username, password, confirmPassword, gender, profilePic } =
+      inputs;
+    if (!profilePic) profilePic = await convertImgToBinary(profilePic[0]);
+    else profilePic = null;
+
     gender = gender[0];
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -25,6 +30,7 @@ export function useSignup() {
           password,
           confirmPassword,
           gender,
+          profilePic,
         }),
       });
       const data = await res.json();

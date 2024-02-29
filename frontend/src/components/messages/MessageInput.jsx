@@ -7,7 +7,7 @@ function MessageInput() {
   const { loading, sendMessage } = useSendMessage();
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!message) return;
+    if (!message || !message.trim()) return;
     await sendMessage(message);
     setMessage("");
   }
