@@ -15,6 +15,18 @@ function Signup() {
     gender: "",
   });
 
+  const handleFileChange = (event) => {
+    console.log(event.target);
+    const selectedFile = event.target.files[0];
+    console.log(selectedFile);
+    const maxSize = 100 * 1024; // 100kb in bytes
+
+    if (selectedFile && selectedFile.size > maxSize) {
+      return "File size exceeds the limit";
+    }
+    return null;
+  };
+
   const { signup, loading } = useSignup();
   async function onSubmit(inputs) {
     await signup(inputs);
@@ -178,10 +190,21 @@ function Signup() {
           </div>
           <GenderCheck register={register} errors={errors} />
           <input
-            {...register("profilePic", {})}
+            // onChange={handleFileChange}
+            {...register("profilePic", {
+              validate: {
+                lessThan10kb: (files) =>
+                  files[0]?.size < 100 * 1024 || "Max 10kb",
+              },
+            })}
             type="file"
             className="file-input file-input-sm file-input-bordered file-input-primary w-full max-w-xs"
           />
+          {errors?.profilePic?.message && (
+            <p className="w-60 text-wrap my-1  text-sm text-red-600">
+              {errors.profilePic.message}
+            </p>
+          )}
           <Link to="/login" className="link link-primary link-hover text-sm">
             Already have an account?
           </Link>

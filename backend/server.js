@@ -1,4 +1,6 @@
 import express from "express";
+import rateLimit from "express-rate-limit";
+import mongoSanitize from "express-mongo-sanitize";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
@@ -16,6 +18,24 @@ const __dirname = path.resolve();
 
 // Enable CORS
 app.use(cors());
+
+//limit requests from same ip
+const limiter = rateLimit({
+  max: 50, //allow 100 requests per ip in one hour
+  windowMs: 60 * 60 * 1000,
+  message: "Too many requests from this ip ,Please try again in one hour.",
+});
+
+app.use("/api", limiter);
+
+//body parser reading data from the body in req.body
+app.use(
+  express.json({
+    limit: "10kb",
+  })
+);
+//remove $ sign from request body query string req params
+app.use(mongoSanitize());
 
 //middlewares
 app.use(express.json());
