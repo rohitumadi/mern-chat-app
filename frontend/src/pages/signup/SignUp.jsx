@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GenderCheck from "./GenderCheck";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,7 +27,13 @@ function Signup() {
     return null;
   };
 
-  const { signup, loading } = useSignup();
+  const { signup, loading, rateLimitReached } = useSignup();
+
+  const navigate = useNavigate();
+  if (rateLimitReached) {
+    navigate("/rate-limit");
+    return;
+  }
   async function onSubmit(inputs) {
     await signup(inputs);
   }

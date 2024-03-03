@@ -1,11 +1,17 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 
 function Login() {
   const { register, handleSubmit, formState } = useForm();
   const { errors } = formState;
-  const { loading, login } = useLogin();
+  const { loading, login, rateLimitReached } = useLogin();
+
+  const navigate = useNavigate();
+  if (rateLimitReached) {
+    navigate("/rate-limit");
+    return;
+  }
   async function onSubmit(inputs) {
     await login(inputs);
   }

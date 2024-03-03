@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { useConversationContext } from "../context/ConversationContext";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useConversationContext } from "../context/ConversationContext";
 
 export function useGetMessages() {
   const [loading, setLoading] = useState();
+  const navigate = useNavigate();
+
   const { messages, setMessages, selectedConversation } =
     useConversationContext();
 
@@ -13,6 +16,10 @@ export function useGetMessages() {
         try {
           setLoading(true);
           const res = await fetch(`/api/messages/${selectedConversation._id}`);
+          const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
+          if (rateLimitRemaining === "1") {
+            navigate("/rate-limit");
+          }
           const data = await res.json();
           if (data.error) {
             throw new Error(data.error);

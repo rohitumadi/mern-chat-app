@@ -3,6 +3,7 @@ import rateLimit from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import messageRoutes from "./routes/message.routes.js";
@@ -21,9 +22,11 @@ app.use(cors());
 
 //limit requests from same ip
 const limiter = rateLimit({
-  max: 50, //allow 100 requests per ip in one hour
+  max: 100, //allow 100 requests per ip in one hour
   windowMs: 60 * 60 * 1000,
-  message: "Too many requests from this ip ,Please try again in one hour.",
+  handler: (req, res) => {
+    res.status(429).json({ error: "Too many requests from this IP" });
+  },
 });
 
 app.use("/api", limiter);
@@ -42,6 +45,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 //routes
+app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);

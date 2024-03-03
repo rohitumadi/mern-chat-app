@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import { useAuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const { setAuthUser } = useAuthContext();
 
   async function login(inputs) {
@@ -20,8 +23,13 @@ export function useLogin() {
           password,
         }),
       });
+      const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
+      if (rateLimitRemaining === "1") {
+        navigate("/rate-limit");
+      }
       const data = await res.json();
       if (data.error) {
+        console.log(data.error);
         toast.error(data.error);
         return;
       }

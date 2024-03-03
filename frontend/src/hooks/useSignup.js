@@ -2,9 +2,12 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 import { convertImgToBinary } from "../utils/convertImgToBinary";
+import { useNavigate } from "react-router-dom";
 
 export function useSignup() {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const { setAuthUser } = useAuthContext();
   async function signup(inputs) {
     let { fullName, username, password, confirmPassword, gender, profilePic } =
@@ -33,6 +36,11 @@ export function useSignup() {
           profilePic,
         }),
       });
+      const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
+      if (rateLimitRemaining === "1") {
+        navigate("/rate-limit");
+      }
+
       const data = await res.json();
       if (res.ok) {
         toast.success("Account created successfully");

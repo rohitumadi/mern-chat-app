@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { BiSolidSend } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 import { useSendMessage } from "../../hooks/useSendMessage";
 
 function MessageInput() {
   const [message, setMessage] = useState("");
-  const { loading, sendMessage } = useSendMessage();
+  const { loading, sendMessage, rateLimitReached } = useSendMessage();
+
+  const navigate = useNavigate();
+  if (rateLimitReached) {
+    console.log("rate-limit in message input");
+    navigate("/rate-limit");
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (!message || !message.trim()) return;

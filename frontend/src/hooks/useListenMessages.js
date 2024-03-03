@@ -15,6 +15,6 @@ export function useListenMessages() {
 
       return () => socket?.off("newMessage");
     },
-    [socket, setMessages, messages]
+    [setMessages, messages]
   );
 }

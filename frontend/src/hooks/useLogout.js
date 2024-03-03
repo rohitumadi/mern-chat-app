@@ -14,6 +14,7 @@ export function useLogout() {
           "Content-Type": "application/json",
         },
       });
+
       const data = await res.json();
       if (data.error) {
         toast.error(data.error);

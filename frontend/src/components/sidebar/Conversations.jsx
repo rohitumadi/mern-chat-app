@@ -1,4 +1,3 @@
-import { useConversationContext } from "../../context/ConversationContext";
 import { useConversations } from "../../hooks/useConversations";
 import Conversation from "./Conversation";
 

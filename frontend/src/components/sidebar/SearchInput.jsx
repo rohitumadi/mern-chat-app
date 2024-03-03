@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { IoSearchCircleSharp } from "react-icons/io5";
-import { useConversations } from "../../hooks/useConversations";
 import toast from "react-hot-toast";
+import { IoSearchCircleSharp } from "react-icons/io5";
 import { useConversationContext } from "../../context/ConversationContext";
+import { useConversations } from "../../hooks/useConversations";
 function SearchInput() {
   const [search, setSearch] = useState("");
   const { setSelectedConversation } = useConversationContext();
   const { loading, conversations } = useConversations();
+
   function handleSubmit(e) {
     e.preventDefault();
     const query = search.trim();
