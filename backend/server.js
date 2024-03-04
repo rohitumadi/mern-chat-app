@@ -34,7 +34,7 @@ app.use("/api", limiter);
 //body parser reading data from the body in req.body
 app.use(
   express.json({
-    limit: "10kb",
+    limit: "300kb",
   })
 );
 //remove $ sign from request body query string req params

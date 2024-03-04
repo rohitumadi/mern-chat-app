@@ -14,7 +14,7 @@ function Conversation({ conversation, lastIdx }) {
       <div
         className={`flex gap-2 ${
           isSelected ? "bg-secondary" : ""
-        } hover:bg-secondary rounded p-2 py-1 items-center cursor-pointer`}
+        } hover:bg-secondary rounded w-full p-2 py-1 items-center cursor-pointer`}
         onClick={() => setSelectedConversation(conversation)}
       >
         <div className={`avatar ${isOnline ? "online" : ""}`}>

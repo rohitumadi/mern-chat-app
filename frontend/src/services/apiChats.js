@@ -11,10 +11,9 @@ export async function getConversations() {
 
   if (data.error) {
     if (data.error === "Token Expired") {
-      localStorage.removeItem("authUser");
       toast.error("Login expired. Please login again");
 
-      return;
+      return { data: null, loginExpired: true };
     }
     console.log("Error while fetching conversations", data.error);
     toast.error("Could not load conversations");
