@@ -56,3 +56,27 @@ export const getMessage = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+export const getMessages = async (req, res) => {
+  try {
+    const senderId = req.user._id;
+    const chats = await Conversation.find({
+      participants: { $all: [senderId] },
+    }).populate([
+      {
+        path: "messages",
+        options: { sort: { createdAt: -1 }, limit: 1 },
+      },
+      {
+        path: "participants",
+        select: "-password",
+        match: { _id: { $ne: senderId } },
+      },
+    ]); //mongoose will populate messages instead of id
+    if (!chats) return res.status(200).json([]);
+
+    res.status(200).json(chats);
+  } catch (err) {
+    console.log("error in get chats controller", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

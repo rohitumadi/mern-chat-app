@@ -21,7 +21,6 @@ function MessageContainer() {
     <div className="flex flex-1 flex-col md:min-w-[450px]">
       <>
         <div className="bg-secondary px-4 py-2 ">
-          <span className="label-text">To:</span>
           <span className="text-gray-900 font-bold">
             {selectedConversation.fullName}
           </span>

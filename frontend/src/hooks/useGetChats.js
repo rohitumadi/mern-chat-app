@@ -1,20 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { getConversations } from "../services/apiChats";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getChats } from "../services/apiChats";
 import { useLogout } from "./useLogout";
 
-export function useConversations() {
+export function useGetChats() {
   const navigate = useNavigate();
+
   const {
     isRefetching: loading,
-    data: conversations,
+    data: chats,
     rateLimitReached,
     loginExpired,
     error,
   } = useQuery({
-    queryKey: ["conversations"],
-    queryFn: getConversations,
+    queryKey: ["chats"],
+    queryFn: getChats,
   });
   const { logout } = useLogout();
   useEffect(
@@ -32,5 +33,6 @@ export function useConversations() {
     },
     [navigate, rateLimitReached]
   );
-  return { loading, conversations, error };
+
+  return { loading, chats, error };
 }

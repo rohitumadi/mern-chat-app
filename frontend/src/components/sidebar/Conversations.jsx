@@ -1,29 +1,31 @@
-import { useConversations } from "../../hooks/useConversations";
+import { useGetChats } from "../../hooks/useGetChats";
 import Conversation from "./Conversation";
 
 function Conversations() {
-  const { loading, conversations, refetch } = useConversations();
+  let { loading, chats } = useGetChats();
+  chats = chats?.map((chat) => {
+    const participant = chat.participants[0];
+    const lastMessage = chat.messages[0];
+    const id = participant._id;
 
+    return {
+      _id: id,
+      fullName: participant.fullName,
+      profilePic: participant.profilePic,
+      lastMessage: lastMessage.message,
+    };
+  });
   return (
     <div className="flex flex-col py-2 overflow-auto ">
-      {!loading && (
-        <button
-          className="btn btn-primary btn-xs rounded-sm w-fit cursor-pointer mb-2"
-          onClick={() => refetch()}
-        >
-          Refresh
-        </button>
-      )}
-
       <div className="flex justify-center flex-col">
         {loading ? (
           <span className="loading loading-spinner text-primary mr-2 "></span>
         ) : (
-          conversations?.map((conversation, idx) => (
+          chats?.map((chat, idx) => (
             <Conversation
-              key={conversation._id}
-              conversation={conversation}
-              lastIdx={idx === conversations.length - 1}
+              key={chat._id}
+              chat={chat}
+              lastIdx={idx === chats.length - 1}
             />
           ))
         )}

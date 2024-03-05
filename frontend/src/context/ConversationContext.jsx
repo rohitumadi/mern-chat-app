@@ -9,11 +9,14 @@ export function useConversationContext() {
 export function ConversationContextProvider({ children }) {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [chats, setChats] = useState([]);
   return (
     <ConversationContext.Provider
       value={{
         selectedConversation,
         setSelectedConversation,
+        chats,
+        setChats,
         messages,
         setMessages,
       }}
