@@ -8,7 +8,7 @@ import { useConversationContext } from "../../context/ConversationContext";
 function Messages() {
   useGetMessages();
   useListenMessages();
-  const { messages, isLoading } = useConversationContext();
+  const { messages, isGettingMessage } = useConversationContext();
   const lastMessageRef = useRef();
 
   useEffect(
@@ -22,12 +22,12 @@ function Messages() {
 
   return (
     <div className="px-4  overflow-auto">
-      {isLoading &&
+      {isGettingMessage &&
         [...Array(5)].map((_, idx) => <MessageSkeleton key={idx} />)}
-      {!isLoading && messages.length === 0 && (
+      {!isGettingMessage && messages.length === 0 && (
         <p className="text-center">No messages yet</p>
       )}
-      {!isLoading &&
+      {!isGettingMessage &&
         messages.length > 0 &&
         messages.map((message) => (
           <div key={message._id} ref={lastMessageRef}>

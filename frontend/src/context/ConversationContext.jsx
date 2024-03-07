@@ -47,14 +47,22 @@ function reducer(state, action) {
 }
 
 export function ConversationContextProvider({ children }) {
-  const [{ messages, isLoading, selectedConversation }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [
+    {
+      messages,
+      isLoading,
+      selectedConversation,
+      isSendingMessage,
+      isGettingMessages,
+    },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   return (
     <ConversationContext.Provider
       value={{
+        isSendingMessage,
+        isGettingMessages,
         isLoading,
         selectedConversation,
         messages,

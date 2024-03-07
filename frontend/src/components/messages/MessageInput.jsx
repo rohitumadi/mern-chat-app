@@ -5,7 +5,7 @@ import { useSendMessage } from "../../hooks/useSendMessage";
 
 function MessageInput() {
   const [message, setMessage] = useState("");
-  const { isLoading } = useConversationContext();
+  const { isSendingMessage } = useConversationContext();
   const { sendMessage } = useSendMessage();
 
   async function handleSubmit(e) {
@@ -25,7 +25,7 @@ function MessageInput() {
           placeholder="Send a message"
         />
         <button type="submit" className="kbd kbd-sm border-primary ">
-          {isLoading ? (
+          {isSendingMessage ? (
             <span className="loading loading-spinner text-primary mr-2"></span>
           ) : (
             <BiSolidSend className="text-primary " />
