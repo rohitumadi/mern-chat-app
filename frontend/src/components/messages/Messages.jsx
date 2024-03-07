@@ -3,11 +3,12 @@ import { useGetMessages } from "../../hooks/useGetMessages";
 import { useListenMessages } from "../../hooks/useListenMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
+import { useConversationContext } from "../../context/ConversationContext";
 
 function Messages() {
-  const { messages, loading } = useGetMessages();
+  useGetMessages();
   useListenMessages();
-
+  const { messages, isLoading } = useConversationContext();
   const lastMessageRef = useRef();
 
   useEffect(
@@ -21,11 +22,12 @@ function Messages() {
 
   return (
     <div className="px-4  overflow-auto">
-      {loading && [...Array(5)].map((_, idx) => <MessageSkeleton key={idx} />)}
-      {!loading && messages.length === 0 && (
+      {isLoading &&
+        [...Array(5)].map((_, idx) => <MessageSkeleton key={idx} />)}
+      {!isLoading && messages.length === 0 && (
         <p className="text-center">No messages yet</p>
       )}
-      {!loading &&
+      {!isLoading &&
         messages.length > 0 &&
         messages.map((message) => (
           <div key={message._id} ref={lastMessageRef}>

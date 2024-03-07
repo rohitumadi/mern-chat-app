@@ -1,17 +1,12 @@
 import { useState } from "react";
 import { BiSolidSend } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
+import { useConversationContext } from "../../context/ConversationContext";
 import { useSendMessage } from "../../hooks/useSendMessage";
 
 function MessageInput() {
   const [message, setMessage] = useState("");
-  const { loading, sendMessage, rateLimitReached } = useSendMessage();
-
-  const navigate = useNavigate();
-  if (rateLimitReached) {
-    console.log("rate-limit in message input");
-    navigate("/rate-limit");
-  }
+  const { isLoading } = useConversationContext();
+  const { sendMessage } = useSendMessage();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,7 +25,7 @@ function MessageInput() {
           placeholder="Send a message"
         />
         <button type="submit" className="kbd kbd-sm border-primary ">
-          {loading ? (
+          {isLoading ? (
             <span className="loading loading-spinner text-primary mr-2"></span>
           ) : (
             <BiSolidSend className="text-primary " />

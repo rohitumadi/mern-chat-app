@@ -4,8 +4,7 @@ import { useSocketContext } from "../../context/SocketContext";
 function Conversation({ chat, lastIdx }) {
   const { fullName, profilePic, lastMessage } = chat;
 
-  const { selectedConversation, setSelectedConversation } =
-    useConversationContext();
+  const { selectedConversation, dispatch } = useConversationContext();
 
   const isSelected = selectedConversation?._id === chat._id;
   const { onlineUsers } = useSocketContext();
@@ -17,7 +16,7 @@ function Conversation({ chat, lastIdx }) {
         className={`flex gap-2 ${
           isSelected ? "bg-secondary" : ""
         } hover:bg-secondary rounded w-full p-2 py-1 items-center cursor-pointer`}
-        onClick={() => setSelectedConversation(chat)}
+        onClick={() => dispatch({ type: "chat/selected", payload: chat })}
       >
         <div className={`avatar ${isOnline ? "online" : ""}`}>
           <div className="w-12 rounded-full">

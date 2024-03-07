@@ -5,7 +5,7 @@ import { useConversationContext } from "../../context/ConversationContext";
 import { useConversations } from "../../hooks/useConversations";
 function SearchInput() {
   const [search, setSearch] = useState("");
-  const { setSelectedConversation } = useConversationContext();
+  const { dispatch } = useConversationContext();
   const { loading, conversations } = useConversations();
 
   function handleSubmit(e) {
@@ -18,7 +18,7 @@ function SearchInput() {
       c.fullName.toLowerCase().includes(query.toLowerCase())
     );
     if (!conversation) return toast.error("User not found");
-    setSelectedConversation(conversation);
+    dispatch({ type: "chat/selected", payload: conversation });
 
     setSearch("");
   }

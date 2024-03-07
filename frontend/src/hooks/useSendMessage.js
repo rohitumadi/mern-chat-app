@@ -1,18 +1,14 @@
-import { useState } from "react";
-
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useConversationContext } from "../context/ConversationContext";
 
 export function useSendMessage() {
-  const [loading, setLoading] = useState();
   const navigate = useNavigate();
 
-  const { messages, setMessages, selectedConversation } =
-    useConversationContext();
+  const { dispatch, selectedConversation } = useConversationContext();
   async function sendMessage(message) {
     try {
-      setLoading(true);
+      dispatch({ type: "message/sending" });
       const receiverId = selectedConversation._id;
       const res = await fetch(`/api/messages/send/${receiverId}`, {
         method: "POST",
@@ -30,13 +26,11 @@ export function useSendMessage() {
       if (data.error) {
         throw new Error(data.error);
       }
-      setMessages([...messages, data]);
+      dispatch({ type: "message/sent", payload: data });
     } catch (error) {
       console.log("Error while sending message", error.message);
       toast.error(error.message);
-    } finally {
-      setLoading(false);
     }
   }
-  return { loading, sendMessage };
+  return { sendMessage };
 }

@@ -6,15 +6,14 @@ import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
 
 function MessageContainer() {
-  const { selectedConversation, setSelectedConversation } =
-    useConversationContext();
+  const { selectedConversation, dispatch } = useConversationContext();
 
   useEffect(() => {
     // Cleanup function to reset selected conversation when component unmounts
     return () => {
-      setSelectedConversation(null);
+      dispatch({ type: "chat/selected", payload: null });
     };
-  }, [setSelectedConversation]);
+  }, [dispatch]);
 
   if (!selectedConversation) return <NoChatSelected />;
   return (

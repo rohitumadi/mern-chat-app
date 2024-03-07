@@ -1,20 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useConversationContext } from "../context/ConversationContext";
 
 export function useGetMessages() {
-  const [loading, setLoading] = useState();
   const navigate = useNavigate();
 
-  const { messages, setMessages, selectedConversation } =
-    useConversationContext();
+  const { selectedConversation, dispatch } = useConversationContext();
 
   useEffect(
     function () {
       async function getMessages() {
         try {
-          setLoading(true);
+          dispatch({ type: "messages/loading" });
           const res = await fetch(`/api/messages/${selectedConversation._id}`);
           const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
           if (rateLimitRemaining === "1") {
@@ -24,17 +22,14 @@ export function useGetMessages() {
           if (data.error) {
             throw new Error(data.error);
           }
-          setMessages(data);
+          dispatch({ type: "messages/loaded", payload: data });
         } catch (error) {
           console.log("Error while fetching messages", error.message);
           toast.error(error.message);
-        } finally {
-          setLoading(false);
         }
       }
       if (selectedConversation?._id) getMessages();
     },
-    [selectedConversation._id, setMessages, navigate]
+    [selectedConversation, navigate, dispatch]
   );
-  return { messages, loading };
 }
