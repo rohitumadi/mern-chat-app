@@ -28,7 +28,9 @@ function Conversation({ chat, lastIdx }) {
         <div className=" flex flex-1  ">
           <div className="flex flex-1 flex-col justify-between">
             <p className="font-bold text-gray-200">{fullName}</p>
-            <span className="text-xs">{lastMessage.substring(0, 20)}...</span>
+            <span className="text-xs">
+              {lastMessage && lastMessage.substring(0, 20)}
+            </span>
           </div>
         </div>
       </div>

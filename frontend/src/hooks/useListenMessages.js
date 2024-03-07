@@ -4,17 +4,19 @@ import { useSocketContext } from "../context/SocketContext";
 
 export function useListenMessages() {
   const { socket } = useSocketContext();
-  const { messages, setMessages } = useConversationContext();
+  const { messages, setMessages, selectedConversation } =
+    useConversationContext();
 
   useEffect(
     function () {
       socket?.on("newMessage", (newMessage) => {
         newMessage.shouldShake = true;
+        if (selectedConversation._id !== newMessage.senderId) return;
         setMessages([...messages, newMessage]);
       });
 
       return () => socket?.off("newMessage");
     },
-    [setMessages, messages]
+    [setMessages, messages, socket, selectedConversation]
   );
 }

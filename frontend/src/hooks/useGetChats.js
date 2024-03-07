@@ -6,7 +6,7 @@ import { useLogout } from "./useLogout";
 
 export function useGetChats() {
   const navigate = useNavigate();
-
+  const { logout } = useLogout();
   const {
     isRefetching: loading,
     data: chats,
@@ -17,7 +17,7 @@ export function useGetChats() {
     queryKey: ["chats"],
     queryFn: getChats,
   });
-  const { logout } = useLogout();
+
   useEffect(
     function () {
       if (loginExpired) logout();

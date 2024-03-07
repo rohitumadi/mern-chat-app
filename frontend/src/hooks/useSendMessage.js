@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import toast from "react-hot-toast";
-import { useConversationContext } from "../context/ConversationContext";
 import { useNavigate } from "react-router-dom";
+import { useConversationContext } from "../context/ConversationContext";
 
 export function useSendMessage() {
   const [loading, setLoading] = useState();
@@ -13,16 +13,14 @@ export function useSendMessage() {
   async function sendMessage(message) {
     try {
       setLoading(true);
-      const res = await fetch(
-        `/api/messages/send/${selectedConversation._id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message }),
-        }
-      );
+      const receiverId = selectedConversation._id;
+      const res = await fetch(`/api/messages/send/${receiverId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+      });
       const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
 
       if (rateLimitRemaining === "1") {

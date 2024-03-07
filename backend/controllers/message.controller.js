@@ -64,7 +64,7 @@ export const getMessages = async (req, res) => {
     }).populate([
       {
         path: "messages",
-        options: { sort: { createdAt: -1 }, limit: 1 },
+        options: { sort: { createdAt: -1 }, perDocumentLimit: 1 },
       },
       {
         path: "participants",

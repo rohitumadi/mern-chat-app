@@ -19,6 +19,7 @@ function SearchInput() {
     );
     if (!conversation) return toast.error("User not found");
     setSelectedConversation(conversation);
+
     setSearch("");
   }
 
