@@ -1,47 +1,19 @@
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { IoSearchCircleSharp } from "react-icons/io5";
-import { useConversationContext } from "../../context/ConversationContext";
-import { useConversations } from "../../hooks/useConversations";
-function SearchInput() {
-  const [search, setSearch] = useState("");
-  const { dispatch } = useConversationContext();
-  const { loading, conversations } = useConversations();
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const query = search.trim();
-    if (!query) return;
-    if (query.length < 3)
-      return toast.error("Search must be at least 3 characters long");
-    const conversation = conversations.find((c) =>
-      c.fullName.toLowerCase().includes(query.toLowerCase())
-    );
-    if (!conversation) return toast.error("User not found");
-    dispatch({ type: "chat/selected", payload: conversation });
-
-    setSearch("");
-  }
-
+function SearchInput({ query, setQuery, error }) {
   return (
-    <form className="flex gap-2 items-center" onSubmit={handleSubmit}>
-      <label className="input input-bordered input-primary flex items-center gap-2">
+    <>
+      <label className="input input-bordered input-primary flex items-center gap-2 mb-5">
         <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           type="text"
           className="grow"
-          placeholder="Search"
+          placeholder="Search Users"
         />
       </label>
-      {loading ? (
-        <span className="loading loading-spinner text-primary mr-2"></span>
-      ) : (
-        <button type="submit">
-          <IoSearchCircleSharp className="w-10 h-10 text-primary hover:text-secondary " />
-        </button>
+      {error && (
+        <span className="text-red-500 text-xs text-center">{error}</span>
       )}
-    </form>
+    </>
   );
 }
 

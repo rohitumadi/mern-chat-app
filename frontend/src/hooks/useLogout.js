@@ -1,9 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function useLogout() {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { setAuthUser } = useAuthContext();
   async function logout() {
     try {
@@ -22,6 +24,7 @@ export function useLogout() {
       toast.success("Logged out successful");
       localStorage.removeItem("authUser");
       setAuthUser(null);
+      navigate("/login");
     } catch (error) {
       console.log("Error while logging out", error);
       toast.error("Error while logging out");

@@ -10,8 +10,10 @@ export function useGetMessages() {
 
   useEffect(
     function () {
+      console.count("useEffect in useGetMessages");
       async function getMessages() {
         try {
+          console.log("getting messages");
           dispatch({ type: "messages/loading" });
           const res = await fetch(`/api/messages/${selectedConversation._id}`);
           const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");

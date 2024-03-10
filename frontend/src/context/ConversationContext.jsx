@@ -4,7 +4,8 @@ export const ConversationContext = createContext();
 
 const initialState = {
   messages: [],
-  isLoading: false,
+  chats: [],
+  isGettingChats: false,
   isSendingMessage: false,
   isGettingMessages: false,
   selectedConversation: null,
@@ -12,34 +13,53 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case "loading":
-      return { ...state, isLoading: true };
+    case "chats/loading":
+      return { ...state, isGettingChats: true };
+    case "chats/loaded":
+      return { ...state, chats: action.payload, isGettingChats: false };
+
     case "messages/loading":
-      return { ...state, isGettingMessage: true };
+      return { ...state, isGettingMessages: true };
     case "message/sending":
       return { ...state, isSendingMessage: true };
     case "messages/loaded":
       return {
         ...state,
         messages: action.payload,
-        isGettingMessage: false,
+        isGettingMessages: false,
       };
     case "message/received":
       return {
         ...state,
         messages: [...state.messages, action.payload],
       };
-    case "message/sent":
+    case "message/sent": {
+      const updatedChats = state.chats.map((chat) => {
+        if (chat.participants.at(0)._id === state.selectedConversation._id) {
+          return {
+            ...chat,
+            lastMessage: action.payload.message,
+            lastMessageTime: action.payload.createdAt,
+          };
+        } else {
+          return chat;
+        }
+      });
       return {
         ...state,
+        chats: updatedChats,
         messages: [...state.messages, action.payload],
         isSendingMessage: false,
       };
+    }
+
     case "chat/selected":
       return {
         ...state,
         selectedConversation: action.payload,
       };
+    case "rejected":
+      return { ...state, error: action.payload };
 
     default:
       throw new Error("Invalid action");
@@ -50,7 +70,7 @@ export function ConversationContextProvider({ children }) {
   const [
     {
       messages,
-      isLoading,
+      chats,
       selectedConversation,
       isSendingMessage,
       isGettingMessages,
@@ -63,7 +83,7 @@ export function ConversationContextProvider({ children }) {
       value={{
         isSendingMessage,
         isGettingMessages,
-        isLoading,
+        chats,
         selectedConversation,
         messages,
         dispatch,
