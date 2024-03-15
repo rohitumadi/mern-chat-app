@@ -45,6 +45,7 @@ export const getMessage = async (req, res) => {
   try {
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
+    console.log("senderId", senderId, "receiverId", receiverId);
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     }).populate("messages"); //mongoose will populate messages instead of id

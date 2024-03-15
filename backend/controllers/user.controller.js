@@ -18,7 +18,7 @@ export const getUsersByQuery = async (req, res) => {
     const allUsers = await User.find(filter).select("-password");
     res.status(200).json(allUsers);
   } catch (err) {
-    console.log("error in get users controller", err.message);
+    console.error("error in get users controller", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };

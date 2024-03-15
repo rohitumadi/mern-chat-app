@@ -186,12 +186,11 @@ function Signup() {
           <input
             {...register("profilePic", {
               validate: {
-                lessThan200KB: (files) =>
-                  files[0]?.size < 200 * 1000 || "Max 200kb",
-                // acceptedFormats: (files) =>
-                //   ["image/jpeg", "image/png", "image/gif"].includes(
-                //     files[0]?.type
-                //   ) || "Only PNG, JPEG e GIF"
+                lessThan200KB: (files) => {
+                  if (files && files.length > 0)
+                    return files[0]?.size < 200 * 1000 || "Max 200kb";
+                  return true;
+                },
               },
             })}
             // onChange={handleFileChange}

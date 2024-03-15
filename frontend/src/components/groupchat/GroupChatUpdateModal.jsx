@@ -1,0 +1,87 @@
+import { useState } from "react";
+import { useConversationContext } from "../../context/ConversationContext";
+import { useUsers } from "../../hooks/useUsers";
+import UserBadge from "./UserBadge";
+import { useRenameGroupChat } from "../../hooks/useRenameGroupChat";
+import toast from "react-hot-toast";
+
+function GroupChatUpdateModal() {
+  const { selectedConversation } = useConversationContext();
+  const [groupChatName, setGroupChatName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { users, loading, error } = useUsers(searchQuery);
+  const { renameGroupChat, renameLoading } = useRenameGroupChat();
+
+  async function handleRenameGroup() {
+    if (!groupChatName) {
+      toast.error("Please fill all the fields");
+      return;
+    }
+    await renameGroupChat({
+      groupId: selectedConversation._id,
+      groupName: groupChatName,
+    });
+
+    setGroupChatName("");
+  }
+
+  return (
+    <div className="modal-box flex flex-col gap-4">
+      <form method="dialog">
+        {/* if there is a button in form, it will close the modal */}
+        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          ✕
+        </button>
+      </form>
+      <h3 className="font-bold text-center capitalize text-lg ">
+        {selectedConversation.groupChatName}
+      </h3>
+      <div className="flex gap-2 justify-center">
+        {selectedConversation.participants.map((user) => (
+          <UserBadge
+            //    onClick={() => handleRemoveUser(user)}
+            key={user._id}
+            user={user.fullName}
+          />
+        ))}
+      </div>
+      <div className="flex gap-2 justify-center">
+        <input
+          type="text"
+          value={groupChatName}
+          onChange={(e) => setGroupChatName(e.target.value)}
+          placeholder="Update Group Name"
+          className="input input-bordered input-primary input-sm w-fit max-w-xs"
+        />
+        {renameLoading ? (
+          <span className="loading loading-spinner text-primary mr-2"></span>
+        ) : (
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={handleRenameGroup}
+          >
+            Rename Group
+          </button>
+        )}
+      </div>
+      <div className="flex  justify-center">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Add User"
+          className="input input-sm w-fit block input-bordered input-primary  max-w-xs"
+        />
+        {error && (
+          <span className="text-red-500 text-xs text-center  ">{error}</span>
+        )}
+      </div>
+      <button className="btn btn-error btn-sm w-fit ml-auto">
+        Leave Group
+      </button>
+    </div>
+  );
+}
+
+export default GroupChatUpdateModal;

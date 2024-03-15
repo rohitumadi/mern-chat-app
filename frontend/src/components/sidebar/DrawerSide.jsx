@@ -19,7 +19,9 @@ function DrawerSide() {
         {/* Sidebar content here */}
         {loading && [...Array(5)].map((_, idx) => <UserSkeleton key={idx} />)}
         {!loading &&
-          users.map((user) => <Conversation key={user._id} chat={user} />)}
+          users.map((user) => (
+            <Conversation dividerOn={true} key={user._id} chat={user} />
+          ))}
       </ul>
     </div>
   );

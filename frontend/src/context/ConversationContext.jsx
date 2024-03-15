@@ -16,8 +16,21 @@ function reducer(state, action) {
     case "chats/loading":
       return { ...state, isGettingChats: true };
     case "chats/loaded":
+      if (state.selectedConversation !== null) {
+        const updatedSelectedConversation = action.payload.find(
+          (chat) => chat._id === state.selectedConversation._id
+        );
+        console.log(updatedSelectedConversation);
+        return {
+          ...state,
+          chats: action.payload,
+          selectedConversation: updatedSelectedConversation,
+          isGettingChats: false,
+        };
+      }
       return { ...state, chats: action.payload, isGettingChats: false };
-
+    case "groupChat/created":
+      return { ...state, chats: [...state.chats, action.payload] };
     case "messages/loading":
       return { ...state, isGettingMessages: true };
     case "message/sending":
@@ -35,7 +48,9 @@ function reducer(state, action) {
       };
     case "message/sent": {
       const updatedChats = state.chats.map((chat) => {
-        if (chat.participants.at(0)._id === state.selectedConversation._id) {
+        if (
+          chat.participants.at(0)._id === state.selectedConversation.receiverId
+        ) {
           return {
             ...chat,
             lastMessage: action.payload.message,

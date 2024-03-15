@@ -12,8 +12,8 @@ export function useSignup() {
   async function signup(inputs) {
     let { fullName, username, password, confirmPassword, gender, profilePic } =
       inputs;
-
-    if (profilePic) profilePic = await convertImgToBinary(profilePic[0]);
+    if (profilePic.length !== 0)
+      profilePic = await convertImgToBinary(profilePic[0]);
     else profilePic = null;
 
     gender = gender[0];

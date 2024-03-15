@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import groupRoutes from "./routes/groupChat.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
@@ -49,6 +50,7 @@ app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/group", groupRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "frontend/dist")));

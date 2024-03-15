@@ -7,7 +7,7 @@ import { useConversationContext } from "../../context/ConversationContext";
 
 function Messages() {
   useGetMessages();
-  useListenMessages();
+
   const { messages, isGettingMessage } = useConversationContext();
   const lastMessageRef = useRef();
 

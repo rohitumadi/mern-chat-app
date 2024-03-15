@@ -2,11 +2,15 @@ import { useEffect } from "react";
 import { useConversationContext } from "../../context/ConversationContext";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
+import { useListenMessages } from "../../hooks/useListenMessages";
+import GroupChatUpdate from "../groupchat/GroupChatUpdate";
 
 function MessageContainer() {
   const { selectedConversation, dispatch } = useConversationContext();
+  useListenMessages();
 
   useEffect(() => {
     // Cleanup function to reset selected conversation when component unmounts
@@ -19,10 +23,17 @@ function MessageContainer() {
   return (
     <div className="flex flex-1 flex-col md:min-w-[450px]">
       <>
-        <div className="bg-secondary px-4 py-2 ">
-          <span className="text-gray-900 font-bold">
-            {selectedConversation.fullName}
+        <div className="bg-secondary px-4 py-2 flex gap-2 items-center ">
+          <img
+            src={selectedConversation.profilePic}
+            className="w-8 h-8 rounded-full"
+          />
+          <span className="text-gray-900 capitalize font-bold">
+            {selectedConversation.isGroupChat
+              ? selectedConversation.groupChatName
+              : selectedConversation.fullName}
           </span>
+          {selectedConversation.isGroupChat && <GroupChatUpdate />}
         </div>
         <Messages />
         <MessageInput />
