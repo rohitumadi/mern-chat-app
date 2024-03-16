@@ -1,18 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { useConversationContext } from "../context/ConversationContext";
-import toast from "react-hot-toast";
-import { useState } from "react";
 import { useGetChats } from "./useGetChats";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
-export function useRenameGroupChat() {
+export function useAddUserToGroup() {
   const navigate = useNavigate();
   const { getChats } = useGetChats();
-  const [renameLoading, setRenameLoading] = useState(false);
-  async function renameGroupChat(data) {
+  const [addUserLoading, setAddUserLoading] = useState(false);
+
+  async function addUserToGroup(data) {
     const { groupId } = data;
     try {
-      setRenameLoading(true);
-      const res = await fetch(`/api/group/${groupId}`, {
+      setAddUserLoading(true);
+      const res = await fetch(`/api/group/add-user/${groupId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -28,15 +28,15 @@ export function useRenameGroupChat() {
         throw new Error(json.error);
       }
 
-      toast.success("Group chat updated successfully");
+      toast.success("User added successfully");
       getChats();
-      // dispatch({ type: "groupChat/created", payload: json });
     } catch (error) {
-      console.log("Error while creating group chat", error.message);
+      console.log("Error while adding user to group chat", error.message);
       toast.error(error.message);
     } finally {
-      setRenameLoading(false);
+      setAddUserLoading(false);
     }
   }
-  return { renameGroupChat, renameLoading };
+
+  return { addUserToGroup, addUserLoading };
 }

@@ -4,11 +4,15 @@ import { useUsers } from "../../hooks/useUsers";
 import UserBadge from "./UserBadge";
 import { useRenameGroupChat } from "../../hooks/useRenameGroupChat";
 import toast from "react-hot-toast";
+import Conversation from "../sidebar/Conversation";
+import { useAuthContext } from "../../context/AuthContext";
+import { useAddUserToGroup } from "../../hooks/useAddUserToGroup";
 
 function GroupChatUpdateModal() {
   const { selectedConversation } = useConversationContext();
+  const { addUserToGroup, addUserLoading } = useAddUserToGroup();
+  const { authUser } = useAuthContext();
   const [groupChatName, setGroupChatName] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { users, loading, error } = useUsers(searchQuery);
   const { renameGroupChat, renameLoading } = useRenameGroupChat();
@@ -26,8 +30,24 @@ function GroupChatUpdateModal() {
     setGroupChatName("");
   }
 
+  async function handleAddUser(user) {
+    if (selectedConversation.participants.find((u) => u._id === user._id)) {
+      toast.error("User already in the group");
+      return;
+    }
+    if (selectedConversation.groupAdmin !== authUser._id) {
+      toast.error("Only group admin can add users");
+      return;
+    }
+    await addUserToGroup({
+      groupId: selectedConversation._id,
+      userId: user._id,
+    });
+    setSearchQuery("");
+  }
+
   return (
-    <div className="modal-box flex flex-col gap-4">
+    <div className="modal-box flex flex-col gap-4 items-center">
       <form method="dialog">
         {/* if there is a button in form, it will close the modal */}
         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -65,7 +85,7 @@ function GroupChatUpdateModal() {
           </button>
         )}
       </div>
-      <div className="flex  justify-center">
+      <div className="flex flex-col gap-2  w-fit">
         <input
           type="text"
           value={searchQuery}
@@ -76,6 +96,15 @@ function GroupChatUpdateModal() {
         {error && (
           <span className="text-red-500 text-xs text-center  ">{error}</span>
         )}
+
+        {!loading &&
+          users.map((user) => (
+            <Conversation
+              onClick={() => handleAddUser(user)}
+              key={user._id}
+              chat={user}
+            />
+          ))}
       </div>
       <button className="btn btn-error btn-sm w-fit ml-auto">
         Leave Group

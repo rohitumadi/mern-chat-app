@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useConversationContext } from "../../context/ConversationContext";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import { groupProfilePic } from "../../../public/img/groupChatPic";
 
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
@@ -25,7 +26,11 @@ function MessageContainer() {
       <>
         <div className="bg-secondary px-4 py-2 flex gap-2 items-center ">
           <img
-            src={selectedConversation.profilePic}
+            src={
+              selectedConversation.isGroupChat
+                ? groupProfilePic
+                : selectedConversation.participants[0].profilePic
+            }
             className="w-8 h-8 rounded-full"
           />
           <span className="text-gray-900 capitalize font-bold">

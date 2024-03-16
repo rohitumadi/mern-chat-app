@@ -27,7 +27,11 @@ function App() {
           />
           <Route path="/rate-limit" element={<RateLimit />} />
         </Routes>
-        <Toaster />
+        <Toaster
+          toastOptions={{
+            duration: 5000,
+          }}
+        />
       </div>
     </ConversationContextProvider>
   );
