@@ -16,6 +16,7 @@ export function useListenMessages() {
           getChats();
           return;
         }
+        getChats();
 
         dispatch({ type: "message/received", payload: newMessage });
       });

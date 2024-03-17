@@ -94,7 +94,10 @@ export const removeUser = async (req, res) => {
     if (!groupChat) {
       return res.status(404).json({ message: "Group chat not found" });
     }
-    if (groupChat.groupAdmin.toString() !== loggedInUser._id.toString()) {
+    if (
+      userId !== loggedInUser._id.toString() &&
+      groupChat.groupAdmin.toString() !== loggedInUser._id.toString()
+    ) {
       return res
         .status(403)
         .json({ message: "Only group admin can remove user from group chat" });

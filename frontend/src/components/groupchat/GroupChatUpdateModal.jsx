@@ -7,10 +7,12 @@ import toast from "react-hot-toast";
 import Conversation from "../sidebar/Conversation";
 import { useAuthContext } from "../../context/AuthContext";
 import { useAddUserToGroup } from "../../hooks/useAddUserToGroup";
+import { useRemoveUserFromGroup } from "../../hooks/useRemoveUserFromGroup";
 
 function GroupChatUpdateModal() {
   const { selectedConversation } = useConversationContext();
   const { addUserToGroup, addUserLoading } = useAddUserToGroup();
+  const { removeUserFromGroup } = useRemoveUserFromGroup();
   const { authUser } = useAuthContext();
   const [groupChatName, setGroupChatName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,6 +48,30 @@ function GroupChatUpdateModal() {
     setSearchQuery("");
   }
 
+  async function handleRemoveUser(user) {
+    if (selectedConversation.groupAdmin !== authUser._id) {
+      toast.error("Only group admin can remove users");
+      return;
+    }
+    await removeUserFromGroup(
+      {
+        groupId: selectedConversation._id,
+        userId: user._id,
+      },
+      "remove"
+    );
+  }
+
+  async function handleLeaveGroup() {
+    await removeUserFromGroup(
+      {
+        groupId: selectedConversation._id,
+        userId: authUser._id,
+      },
+      "leave"
+    );
+  }
+
   return (
     <div className="modal-box flex flex-col gap-4 items-center">
       <form method="dialog">
@@ -60,7 +86,7 @@ function GroupChatUpdateModal() {
       <div className="flex gap-2 justify-center">
         {selectedConversation.participants.map((user) => (
           <UserBadge
-            //    onClick={() => handleRemoveUser(user)}
+            onClick={() => handleRemoveUser(user)}
             key={user._id}
             user={user.fullName}
           />
@@ -106,7 +132,10 @@ function GroupChatUpdateModal() {
             />
           ))}
       </div>
-      <button className="btn btn-error btn-sm w-fit ml-auto">
+      <button
+        onClick={handleLeaveGroup}
+        className="btn btn-error btn-sm w-fit ml-auto"
+      >
         Leave Group
       </button>
     </div>

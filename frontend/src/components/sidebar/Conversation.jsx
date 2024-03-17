@@ -2,18 +2,18 @@ import { useConversationContext } from "../../context/ConversationContext";
 import { useSocketContext } from "../../context/SocketContext";
 
 function Conversation({ chat, lastIdx, dividerOn, onClick }) {
-  const { fullName, profilePic, lastMessage, isGroupChat, groupChatName } =
-    chat;
+  const { chatName, profilePic, lastMessage } = chat;
 
   const { selectedConversation, dispatch } = useConversationContext();
   const isSelected = selectedConversation?._id === chat._id;
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(chat.receiverId);
+  console.log(chat);
   const handleClick = () => {
     if (onClick) {
       onClick(); // Pass the chat object to the onClick function
     } else {
-      console.log(chat);
+      console.log("chat selected", chat);
       dispatch({ type: "chat/selected", payload: chat });
     }
   };
@@ -34,9 +34,7 @@ function Conversation({ chat, lastIdx, dividerOn, onClick }) {
 
         <div className=" flex flex-1  ">
           <div className="flex flex-1 flex-col justify-between">
-            <p className="font-bold capitalize text-gray-200">
-              {isGroupChat ? groupChatName : fullName}
-            </p>
+            <p className="font-bold capitalize text-gray-200">{chatName}</p>
             <span className="text-xs">
               {lastMessage && lastMessage.substring(0, 20)}
             </span>

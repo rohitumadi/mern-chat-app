@@ -29,7 +29,7 @@ function MessageContainer() {
             src={
               selectedConversation.isGroupChat
                 ? groupProfilePic
-                : selectedConversation.participants[0].profilePic
+                : selectedConversation.profilePic
             }
             className="w-8 h-8 rounded-full"
           />

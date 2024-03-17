@@ -1,14 +1,13 @@
 import { useEffect, useRef } from "react";
+import { useConversationContext } from "../../context/ConversationContext";
 import { useGetMessages } from "../../hooks/useGetMessages";
-import { useListenMessages } from "../../hooks/useListenMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
-import { useConversationContext } from "../../context/ConversationContext";
 
 function Messages() {
-  useGetMessages();
+  const { getMessagesLoading } = useGetMessages();
 
-  const { messages, isGettingMessage } = useConversationContext();
+  const { messages } = useConversationContext();
   const lastMessageRef = useRef();
 
   useEffect(
@@ -19,15 +18,14 @@ function Messages() {
     },
     [messages]
   );
-
   return (
     <div className="px-4  overflow-auto">
-      {isGettingMessage &&
+      {getMessagesLoading &&
         [...Array(5)].map((_, idx) => <MessageSkeleton key={idx} />)}
-      {!isGettingMessage && messages.length === 0 && (
+      {!getMessagesLoading && messages.length === 0 && (
         <p className="text-center">No messages yet</p>
       )}
-      {!isGettingMessage &&
+      {!getMessagesLoading &&
         messages.length > 0 &&
         messages.map((message) => (
           <div key={message._id} ref={lastMessageRef}>

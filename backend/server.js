@@ -19,7 +19,11 @@ const PORT = process.env.PORT || 3000;
 const __dirname = path.resolve();
 
 // Enable CORS
-app.use(cors());
+app.use(
+  cors({
+    exposedHeaders: ["Retry-After"],
+  })
+);
 
 //limit requests from same ip
 const limiter = rateLimit({

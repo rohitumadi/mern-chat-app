@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { BiSolidSend } from "react-icons/bi";
-import { useConversationContext } from "../../context/ConversationContext";
 import { useSendMessage } from "../../hooks/useSendMessage";
 
 function MessageInput() {
   const [message, setMessage] = useState("");
-  const { isSendingMessage } = useConversationContext();
-  const { sendMessage } = useSendMessage();
+  const { sendMessage, sendMessageLoading } = useSendMessage();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -25,7 +23,7 @@ function MessageInput() {
           placeholder="Send a message"
         />
         <button type="submit" className="kbd kbd-sm border-primary ">
-          {isSendingMessage ? (
+          {sendMessageLoading ? (
             <span className="loading loading-spinner text-primary mr-2"></span>
           ) : (
             <BiSolidSend className="text-primary " />

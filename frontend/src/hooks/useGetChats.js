@@ -11,7 +11,6 @@ export function useGetChats() {
   const getChats = useCallback(
     async function () {
       console.log("getting chats");
-      dispatch({ type: "chats/loading" });
       try {
         const res = await fetch("/api/messages");
         const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");

@@ -9,9 +9,9 @@ function RateLimit() {
   const { authUser } = useAuthContext();
   const navigate = useNavigate();
 
-  useEffect(function () {
-    if (authUser) logout();
-  }, []);
+  // useEffect(function () {
+  //   if (authUser) logout();
+  // }, []);
   useEffect(
     function () {
       async function getHealth() {

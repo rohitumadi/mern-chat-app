@@ -5,22 +5,23 @@ function Conversations() {
   let { chats } = useConversationContext();
   console.log(chats);
   chats = chats?.map((chat) => {
-    const participant = chat.participants[0];
+    const participants = chat.isGroupChat
+      ? chat.participants.map((p) => p._id)
+      : chat.participants[0];
     const groupChatName = chat.isGroupChat ? chat.groupChatName : "";
-    const lastMessage = chat.lastMessage || chat.messages[0] || "";
+    const lastMessage = chat.messages[0] || "";
     const id = chat._id;
-    const lastMessageTime = chat.lastMessageTime || chat.updatedAt;
+    const lastMessageTime = chat.updatedAt;
 
     return {
       _id: id,
-      receiverId: participant._id,
+      receiverId: chat.isGroupChat ? participants : participants._id,
       isGroupChat: chat.isGroupChat,
-      fullName: chat.isGroupChat ? undefined : participant.fullName,
-      participants: chat.participants,
-      profilePic: chat.isGroupChat ? groupProfilePic : participant.profilePic,
+      chatName: chat.isGroupChat ? chat.groupChatName : participants.fullName,
+      participants,
+      profilePic: chat.isGroupChat ? groupProfilePic : participants.profilePic,
       lastMessage: lastMessage.message ? lastMessage.message : lastMessage,
       lastMessageTime,
-      groupChatName,
     };
   });
   chats = chats.sort(
