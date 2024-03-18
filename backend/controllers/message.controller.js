@@ -17,7 +17,7 @@ export const sendMessage = async (req, res) => {
     if (!conversation) {
       return res.status(404).json({ error: "Chat not found" });
     }
-    const newMessage = new Message({
+    let newMessage = new Message({
       senderId,
       message,
     });
@@ -27,7 +27,7 @@ export const sendMessage = async (req, res) => {
     // await newMessage.save();
     //this will run in parallel
     await Promise.all([conversation.save(), newMessage.save()]);
-
+    newMessage.chatId = conversation._id;
     //SOCKET IO functionality will go here
     const receiverSocketIds = getReceiverSocketId(receiverIds);
 

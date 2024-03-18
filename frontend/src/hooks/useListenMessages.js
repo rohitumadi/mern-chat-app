@@ -13,9 +13,9 @@ export function useListenMessages() {
     function () {
       socket?.on("newMessage", (newMessage) => {
         newMessage.shouldShake = true;
-        const isSelectedReceiverId = selectedConversation?.receiverIds.includes(
-          newMessage.senderId
-        );
+
+        const isSelectedReceiverId =
+          selectedConversation?._id === newMessage.chatId;
         if (!isSelectedReceiverId) {
           getChats();
           return;
