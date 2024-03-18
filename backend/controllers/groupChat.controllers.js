@@ -67,7 +67,6 @@ export const addUser = async (req, res) => {
       return res.status(404).json({ message: "Group chat not found" });
     }
     if (groupChat.groupAdmin.toString() !== loggedInUser._id.toString()) {
-      console.log(groupChat.groupAdmin.toString(), loggedInUser._id.toString());
       return res
         .status(403)
         .json({ message: "Only group admin can add user to group chat" });

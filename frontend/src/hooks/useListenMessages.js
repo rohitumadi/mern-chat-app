@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { useConversationContext } from "../context/ConversationContext";
 import { useSocketContext } from "../context/SocketContext";
 import { useGetChats } from "./useGetChats";
+import { useMessageContext } from "../context/MessageContext";
 
 export function useListenMessages() {
   const { socket } = useSocketContext();
-  const { messages, selectedConversation, dispatch } = useConversationContext();
+  const { selectedConversation } = useConversationContext();
+  const { messages, dispatch } = useMessageContext();
   const { getChats } = useGetChats();
   useEffect(
     function () {

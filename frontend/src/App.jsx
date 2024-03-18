@@ -6,33 +6,36 @@ import RateLimit from "./pages/error/RateLimit";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
+import { MessageContextProvider } from "./context/MessageContext";
 
 function App() {
   const { authUser } = useAuthContext();
   return (
     <ConversationContextProvider>
-      <div className="p-4 h-screen flex bg-cover items-center justify-center  ">
-        <Routes>
-          <Route
-            path="/"
-            element={authUser ? <Home /> : <Navigate to="/login" />}
+      <MessageContextProvider>
+        <div className="p-4 h-screen flex bg-cover items-center justify-center  ">
+          <Routes>
+            <Route
+              path="/"
+              element={authUser ? <Home /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/login"
+              element={authUser ? <Navigate to="/" /> : <Login />}
+            />
+            <Route
+              path="/signup"
+              element={authUser ? <Navigate to="/" /> : <SignUp />}
+            />
+            <Route path="/rate-limit" element={<RateLimit />} />
+          </Routes>
+          <Toaster
+            toastOptions={{
+              duration: 5000,
+            }}
           />
-          <Route
-            path="/login"
-            element={authUser ? <Navigate to="/" /> : <Login />}
-          />
-          <Route
-            path="/signup"
-            element={authUser ? <Navigate to="/" /> : <SignUp />}
-          />
-          <Route path="/rate-limit" element={<RateLimit />} />
-        </Routes>
-        <Toaster
-          toastOptions={{
-            duration: 5000,
-          }}
-        />
-      </div>
+        </div>
+      </MessageContextProvider>
     </ConversationContextProvider>
   );
 }

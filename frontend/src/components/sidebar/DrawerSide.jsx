@@ -23,7 +23,6 @@ function DrawerSide({ checked }) {
         <SearchInput query={query} setQuery={setQuery} error={error} />
         {/* Sidebar content here */}
         {loading && [...Array(5)].map((_, idx) => <UserSkeleton key={idx} />)}
-        {/* TODO add onclick create new chat handler */}
         {!loading &&
           users.map((user, idx) => (
             <User

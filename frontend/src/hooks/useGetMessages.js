@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useConversationContext } from "../context/ConversationContext";
+import { useMessageContext } from "../context/MessageContext";
 
 export function useGetMessages() {
   const navigate = useNavigate();
-  const { selectedConversation, dispatch } = useConversationContext();
+  const { selectedConversation } = useConversationContext();
+  const { dispatch } = useMessageContext();
   const [getMessagesLoading, setGetMessagesLoading] = useState(false);
 
   useEffect(

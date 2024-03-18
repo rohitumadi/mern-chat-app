@@ -2,7 +2,6 @@ import { createContext, useContext, useReducer } from "react";
 export const ConversationContext = createContext();
 
 const initialState = {
-  messages: [],
   chats: [],
   selectedConversation: null,
 };
@@ -28,22 +27,6 @@ function reducer(state, action) {
       return { ...state, chats: action.payload };
     case "groupChat/created":
       return { ...state, chats: [...state.chats, action.payload] };
-    case "messages/loaded":
-      return {
-        ...state,
-        messages: action.payload,
-      };
-    case "message/received":
-      return {
-        ...state,
-        messages: [...state.messages, action.payload],
-      };
-    case "message/sent": {
-      return {
-        ...state,
-        messages: [...state.messages, action.payload],
-      };
-    }
 
     case "chat/selected":
       return {
@@ -65,7 +48,7 @@ function reducer(state, action) {
 }
 
 export function ConversationContextProvider({ children }) {
-  const [{ messages, chats, selectedConversation }, dispatch] = useReducer(
+  const [{ chats, selectedConversation }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -75,7 +58,7 @@ export function ConversationContextProvider({ children }) {
       value={{
         chats,
         selectedConversation,
-        messages,
+
         dispatch,
       }}
     >

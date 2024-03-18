@@ -6,15 +6,17 @@ function Message({ message }) {
   const { authUser } = useAuthContext();
   const { selectedConversation } = useConversationContext();
   const fromMe = message.senderId === authUser._id;
-  const senderName =
+
+  let senderName =
     !fromMe &&
     selectedConversation.participants.find((p) => p._id === message.senderId)
-      .fullName;
+      ?.fullName;
+  if (!senderName && !fromMe) senderName = "user left";
   const chatClassMe = fromMe ? "chat-end" : "chat-start";
   const profilePic = fromMe
     ? authUser.profilePic
     : selectedConversation.participants.find((p) => p._id === message.senderId)
-        .profilePic;
+        ?.profilePic;
   const bubbleClass = fromMe ? "bg-secondary" : "";
   const formattedTime = extractTime(message.createdAt);
   const shouldShake = message.shouldShake ? "shake" : "";
@@ -23,7 +25,7 @@ function Message({ message }) {
     <div className={`chat ${chatClassMe}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
-          <img alt="Tailwind CSS chat bubble component" src={profilePic} />
+          <img alt="" src={profilePic} />
         </div>
       </div>
       <div

@@ -12,7 +12,6 @@ import GroupChatUpdate from "../groupchat/GroupChatUpdate";
 function MessageContainer() {
   const { selectedConversation, dispatch } = useConversationContext();
   useListenMessages();
-
   useEffect(() => {
     // Cleanup function to reset selected conversation when component unmounts
     return () => {

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useConversationContext } from "../../context/ConversationContext";
+import { useMessageContext } from "../../context/MessageContext";
 import { useGetMessages } from "../../hooks/useGetMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
 import Message from "./Message";
@@ -7,7 +7,7 @@ import Message from "./Message";
 function Messages() {
   const { getMessagesLoading } = useGetMessages();
 
-  const { messages } = useConversationContext();
+  const { messages } = useMessageContext();
   const lastMessageRef = useRef();
 
   useEffect(

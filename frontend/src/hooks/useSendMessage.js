@@ -3,13 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useConversationContext } from "../context/ConversationContext";
 import { useGetChats } from "./useGetChats";
 import { useState } from "react";
+import { useMessageContext } from "../context/MessageContext";
 
 export function useSendMessage() {
   const navigate = useNavigate();
+  const { selectedConversation } = useConversationContext();
+  const { dispatch } = useMessageContext();
   const { getChats } = useGetChats();
   const [sendMessageLoading, setSendMessageLoading] = useState(false);
 
-  const { dispatch, selectedConversation } = useConversationContext();
   async function sendMessage(message) {
     try {
       setSendMessageLoading(true);
