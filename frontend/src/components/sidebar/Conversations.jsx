@@ -3,7 +3,6 @@ import Conversation from "./Conversation";
 import { groupProfilePic } from "../../../public/img/groupChatPic";
 function Conversations() {
   let { chats } = useConversationContext();
-  console.log(chats);
   chats = chats?.map((chat) => {
     const participantsIds = chat.isGroupChat
       ? chat.participants.map((p) => p._id)

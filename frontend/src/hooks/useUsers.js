@@ -9,11 +9,8 @@ export function useUsers(query) {
   const [error, setError] = useState("");
   useEffect(
     function () {
-      console.count("useEffect in get Users");
       const controller = new AbortController();
       async function getUsers() {
-        console.log("getting users");
-
         setLoading(true);
         try {
           const res = await fetch(`/api/users?search=${query}`, {

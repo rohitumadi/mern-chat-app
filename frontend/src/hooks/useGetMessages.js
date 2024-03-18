@@ -10,13 +10,10 @@ export function useGetMessages() {
 
   useEffect(
     function () {
-      console.count("useEffect in useGetMessages");
       async function getMessages() {
         try {
-          console.log("getting messages");
           setGetMessagesLoading(true);
           const chatId = selectedConversation._id;
-          console.log("chatId", chatId);
           const res = await fetch(`/api/messages/${chatId}`);
           const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
           if (rateLimitRemaining === "1") {
@@ -27,7 +24,6 @@ export function useGetMessages() {
           if (data.error) {
             throw new Error(data.error);
           }
-          console.log("got messages", data);
           dispatch({ type: "messages/loaded", payload: data });
         } catch (error) {
           console.error("Error while fetching messages", error.message);

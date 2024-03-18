@@ -36,7 +36,8 @@ function MessageContainer() {
           <span className="text-gray-900 capitalize font-bold">
             {selectedConversation.isGroupChat
               ? selectedConversation.chatName
-              : selectedConversation.chatName}
+              : selectedConversation.chatName ||
+                selectedConversation.participants[0].fullName}
           </span>
           {selectedConversation.isGroupChat && <GroupChatUpdate />}
         </div>

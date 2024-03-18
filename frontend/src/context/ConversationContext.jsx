@@ -15,6 +15,10 @@ function reducer(state, action) {
         const updatedSelectedConversation = action.payload.find(
           (chat) => chat._id === state.selectedConversation._id
         );
+        updatedSelectedConversation.receiverIds =
+          updatedSelectedConversation.isGroupChat
+            ? updatedSelectedConversation.participants.map((p) => p._id)
+            : [updatedSelectedConversation.participants[0]._id];
         return {
           ...state,
           chats: action.payload,
@@ -42,6 +46,12 @@ function reducer(state, action) {
     }
 
     case "chat/selected":
+      return {
+        ...state,
+        selectedConversation: action.payload,
+      };
+
+    case "chat/created":
       return {
         ...state,
         selectedConversation: action.payload,

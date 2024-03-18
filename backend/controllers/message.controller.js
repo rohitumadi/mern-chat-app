@@ -84,3 +84,27 @@ export const getChats = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const createChat = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const loggedInUser = req.user;
+    if (!userId) {
+      return res.status(400).json({ message: "Please enter all the fields" });
+    }
+    const isExistingChat = await Conversation.findOne({
+      participants: { $all: [loggedInUser._id, userId] },
+      isGroupChat: false,
+    });
+    if (isExistingChat) {
+      return res.status(400).json({ message: "Chat already exists" });
+    }
+    const chat = await Conversation.create({
+      participants: [loggedInUser._id, userId],
+    });
+    res.status(201).json(chat);
+  } catch (err) {
+    console.log("error in create chat controller", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

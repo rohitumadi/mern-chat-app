@@ -7,12 +7,10 @@ function Conversation({ chat, lastIdx, dividerOn, onClick }) {
   const { selectedConversation, dispatch } = useConversationContext();
   const isSelected = selectedConversation?._id === chat._id;
   const { onlineUsers } = useSocketContext();
-  console.log(receiverIds);
   const isOnline = receiverIds?.some((receiverId) =>
     onlineUsers.includes(receiverId)
   );
   const handleClick = () => {
-    console.log("chat selected", chat);
     dispatch({ type: "chat/selected", payload: chat });
   };
 

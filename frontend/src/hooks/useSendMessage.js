@@ -13,8 +13,6 @@ export function useSendMessage() {
   async function sendMessage(message) {
     try {
       setSendMessageLoading(true);
-      //TODO need to handle when chat is selected by searching users because there receiver id
-      //will be null
       const chatId = selectedConversation._id;
       const res = await fetch(`/api/messages/${chatId}`, {
         method: "POST",

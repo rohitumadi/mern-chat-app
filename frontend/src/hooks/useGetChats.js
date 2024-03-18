@@ -10,7 +10,6 @@ export function useGetChats() {
   const { dispatch } = useConversationContext();
   const getChats = useCallback(
     async function () {
-      console.log("getting chats");
       try {
         const res = await fetch("/api/messages");
         const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");

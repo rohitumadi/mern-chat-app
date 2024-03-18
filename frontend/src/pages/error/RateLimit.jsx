@@ -33,7 +33,6 @@ function RateLimit() {
         setTimeLeft((prevTimeLeft) => {
           if (prevTimeLeft === 0) {
             clearInterval(id);
-            navigate("/login");
             return 0;
           } else {
             return prevTimeLeft - 1;
