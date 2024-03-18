@@ -1,14 +1,14 @@
 import { useState } from "react";
-import SearchInput from "./SearchInput";
 import { useUsers } from "../../hooks/useUsers";
-import Conversation from "./Conversation";
 import UserSkeleton from "../skeletons/UserSkeleton";
+import User from "../users/User";
+import SearchInput from "./SearchInput";
 
 function DrawerSide() {
   const [query, setQuery] = useState("");
   const { users, loading, error } = useUsers(query);
   return (
-    <div className="drawer-side z-10">
+    <div className="drawer-side z-20">
       <label
         htmlFor="my-drawer"
         // aria-label="close sidebar"
@@ -18,9 +18,15 @@ function DrawerSide() {
         <SearchInput query={query} setQuery={setQuery} error={error} />
         {/* Sidebar content here */}
         {loading && [...Array(5)].map((_, idx) => <UserSkeleton key={idx} />)}
+        {/* TODO add onclick create new chat handler */}
         {!loading &&
-          users.map((user) => (
-            <Conversation dividerOn={true} key={user._id} chat={user} />
+          users.map((user, idx) => (
+            <User
+              dividerOn={true}
+              lastIdx={idx === users.length - 1}
+              key={user._id}
+              user={user}
+            />
           ))}
       </ul>
     </div>

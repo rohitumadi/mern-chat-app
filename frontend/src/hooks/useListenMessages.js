@@ -11,8 +11,10 @@ export function useListenMessages() {
     function () {
       socket?.on("newMessage", (newMessage) => {
         newMessage.shouldShake = true;
-        const receiverId = selectedConversation?.receiverId;
-        if (receiverId === null || receiverId !== newMessage.senderId) {
+        const isSelectedReceiverId = selectedConversation?.receiverIds.includes(
+          newMessage.senderId
+        );
+        if (!isSelectedReceiverId) {
           getChats();
           return;
         }

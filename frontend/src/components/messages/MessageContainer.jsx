@@ -29,14 +29,14 @@ function MessageContainer() {
             src={
               selectedConversation.isGroupChat
                 ? groupProfilePic
-                : selectedConversation.profilePic
+                : selectedConversation.participants[0].profilePic
             }
             className="w-8 h-8 rounded-full"
           />
           <span className="text-gray-900 capitalize font-bold">
             {selectedConversation.isGroupChat
-              ? selectedConversation.groupChatName
-              : selectedConversation.fullName}
+              ? selectedConversation.chatName
+              : selectedConversation.chatName}
           </span>
           {selectedConversation.isGroupChat && <GroupChatUpdate />}
         </div>

@@ -1,21 +1,16 @@
-import { useConversationContext } from "../../context/ConversationContext";
+import { useState } from "react";
 import { useSocketContext } from "../../context/SocketContext";
 
-function Conversation({ chat, lastIdx, dividerOn, onClick }) {
-  const { chatName, profilePic, lastMessage, receiverIds } = chat;
-
-  const { selectedConversation, dispatch } = useConversationContext();
-  const isSelected = selectedConversation?._id === chat._id;
+function User({ user, onClick, dividerOn, lastIdx }) {
   const { onlineUsers } = useSocketContext();
-  console.log(receiverIds);
-  const isOnline = receiverIds?.some((receiverId) =>
-    onlineUsers.includes(receiverId)
-  );
+  const { fullName, profilePic } = user;
+  const [selectedUser, setSelectedUser] = useState(null);
+  const isSelected = selectedUser?._id === user._id;
+  const isOnline = onlineUsers.includes(user._id);
   const handleClick = () => {
-    console.log("chat selected", chat);
-    dispatch({ type: "chat/selected", payload: chat });
+    setSelectedUser(user);
+    onClick(); // Pass the chat object to the onClick function
   };
-
   return (
     <>
       <div
@@ -32,10 +27,7 @@ function Conversation({ chat, lastIdx, dividerOn, onClick }) {
 
         <div className=" flex flex-1  ">
           <div className="flex flex-1 flex-col justify-between">
-            <p className="font-bold capitalize text-gray-200">{chatName}</p>
-            <span className="text-xs">
-              {lastMessage && lastMessage.substring(0, 20)}
-            </span>
+            <p className="font-bold capitalize text-gray-200">{fullName}</p>
           </div>
         </div>
       </div>
@@ -44,4 +36,4 @@ function Conversation({ chat, lastIdx, dividerOn, onClick }) {
   );
 }
 
-export default Conversation;
+export default User;

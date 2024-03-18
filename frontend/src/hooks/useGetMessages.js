@@ -15,10 +15,9 @@ export function useGetMessages() {
         try {
           console.log("getting messages");
           setGetMessagesLoading(true);
-          const receiverId =
-            selectedConversation.receiverId || selectedConversation._id;
-          console.log("receiverId", receiverId);
-          const res = await fetch(`/api/messages/${receiverId}`);
+          const chatId = selectedConversation._id;
+          console.log("chatId", chatId);
+          const res = await fetch(`/api/messages/${chatId}`);
           const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
           if (rateLimitRemaining === "1") {
             navigate("/rate-limit");

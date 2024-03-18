@@ -10,7 +10,7 @@ function Message({ message }) {
   console.log(selectedConversation);
   const profilePic = fromMe
     ? authUser.profilePic
-    : selectedConversation.profilePic;
+    : selectedConversation.participants[0].profilePic;
   const bubbleClass = fromMe ? "bg-secondary" : "";
   const formattedTime = extractTime(message.createdAt);
   const shouldShake = message.shouldShake ? "shake" : "";

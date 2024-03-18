@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useConversationContext } from "../../context/ConversationContext";
-import { useUsers } from "../../hooks/useUsers";
-import UserBadge from "./UserBadge";
-import { useRenameGroupChat } from "../../hooks/useRenameGroupChat";
 import toast from "react-hot-toast";
-import Conversation from "../sidebar/Conversation";
 import { useAuthContext } from "../../context/AuthContext";
+import { useConversationContext } from "../../context/ConversationContext";
 import { useAddUserToGroup } from "../../hooks/useAddUserToGroup";
 import { useRemoveUserFromGroup } from "../../hooks/useRemoveUserFromGroup";
+import { useRenameGroupChat } from "../../hooks/useRenameGroupChat";
+import { useUsers } from "../../hooks/useUsers";
+import User from "../users/User";
+import UserBadge from "./UserBadge";
 
 function GroupChatUpdateModal() {
   const { selectedConversation } = useConversationContext();
@@ -81,7 +81,7 @@ function GroupChatUpdateModal() {
         </button>
       </form>
       <h3 className="font-bold text-center capitalize text-lg ">
-        {selectedConversation.groupChatName}
+        {selectedConversation.chatName}
       </h3>
       <div className="flex gap-2 justify-center">
         {selectedConversation.participants.map((user) => (
@@ -125,10 +125,10 @@ function GroupChatUpdateModal() {
 
         {!loading &&
           users.map((user) => (
-            <Conversation
+            <User
               onClick={() => handleAddUser(user)}
               key={user._id}
-              chat={user}
+              user={user}
             />
           ))}
       </div>

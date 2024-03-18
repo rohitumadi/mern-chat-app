@@ -2,7 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useCreateGroupChat } from "../../hooks/useCreateGroupChat";
 import { useUsers } from "../../hooks/useUsers";
-import Conversation from "../sidebar/Conversation";
+import User from "../users/User";
 import UserBadge from "./UserBadge";
 
 function GroupChatModal() {
@@ -83,10 +83,10 @@ function GroupChatModal() {
         <div className="flex flex-col gap-3 mb-2">
           {!loading &&
             users.map((user) => (
-              <Conversation
+              <User
                 onClick={() => handleSelectUser(user)}
                 key={user._id}
-                chat={user}
+                user={user}
               />
             ))}
         </div>

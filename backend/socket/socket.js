@@ -5,14 +5,16 @@ const app = express();
 
 const server = http.createServer(app);
 const io = new Server(server, {
+  pingTimeout: 60000, //wait 60 seconds before closing connection
+  // to save bandwidth
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
 const userSocketMap = {}; //userId:socket
-export function getReceiverId(receiverId) {
-  return userSocketMap[receiverId];
+export function getReceiverSocketId(receiverIds) {
+  return receiverIds.map((receiverId) => userSocketMap[receiverId]);
 }
 
 io.on("connection", (socket) => {

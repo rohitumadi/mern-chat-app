@@ -1,38 +1,42 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
-import { getReceiverId, io } from "../socket/socket.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
   try {
+    const { id: chatId } = req.params;
     const { message } = req.body;
-    const { id: receiverId } = req.params;
+    if (!message)
+      return res.status(400).json({ error: "Message content cannot be empty" });
     const senderId = req.user._id;
     let conversation = await Conversation.findOne({
       //match all fields
-      participants: { $all: [senderId, receiverId] },
+      _id: chatId,
     });
+    console.log("conversation", conversation);
     if (!conversation) {
-      conversation = await Conversation.create({
-        participants: [senderId, receiverId],
-      });
+      return res.status(404).json({ error: "Chat not found" });
     }
     const newMessage = new Message({
       senderId,
-      receiverId,
       message,
     });
     if (newMessage) conversation.messages.push(newMessage._id);
-
+    const receiverIds = conversation.participants;
     // await conversation.save();
     // await newMessage.save();
     //this will run in parallel
     await Promise.all([conversation.save(), newMessage.save()]);
 
     //SOCKET IO functionality will go here
-    const receiverSocketId = getReceiverId(receiverId);
-    if (receiverSocketId)
+    const receiverSocketIds = getReceiverSocketId(receiverIds);
+
+    if (receiverSocketIds) {
       //io.to is use to send events to specific client
-      io.to(receiverSocketId).emit("newMessage", newMessage);
+      receiverSocketIds.map((receiverSocketId) => {
+        io.to(receiverSocketId).emit("newMessage", newMessage);
+      });
+    }
 
     res.status(201).json(newMessage);
   } catch (err) {
@@ -41,15 +45,14 @@ export const sendMessage = async (req, res) => {
   }
 };
 
-export const getMessage = async (req, res) => {
+export const getMessages = async (req, res) => {
   try {
-    const { id: receiverId } = req.params;
+    const { id: chatId } = req.params;
     const senderId = req.user._id;
-    console.log("senderId", senderId, "receiverId", receiverId);
     const conversation = await Conversation.findOne({
-      participants: { $all: [senderId, receiverId] },
+      _id: chatId,
     }).populate("messages"); //mongoose will populate messages instead of id
-    if (!conversation) return res.status(200).json([]);
+    if (!conversation) return res.status(404).json({ error: "Chat not found" });
 
     res.status(200).json(conversation.messages);
   } catch (err) {
@@ -73,7 +76,7 @@ export const getChats = async (req, res) => {
         match: { _id: { $ne: senderId } },
       },
     ]); //mongoose will populate messages instead of id
-    if (!chats) return res.status(200).json([]);
+    if (!chats) return res.status(404).json({ error: "Chat not found" });
 
     res.status(200).json(chats);
   } catch (err) {

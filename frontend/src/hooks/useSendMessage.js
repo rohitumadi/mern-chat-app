@@ -13,9 +13,10 @@ export function useSendMessage() {
   async function sendMessage(message) {
     try {
       setSendMessageLoading(true);
-      const receiverId =
-        selectedConversation.receiverId || selectedConversation._id;
-      const res = await fetch(`/api/messages/send/${receiverId}`, {
+      //TODO need to handle when chat is selected by searching users because there receiver id
+      //will be null
+      const chatId = selectedConversation._id;
+      const res = await fetch(`/api/messages/${chatId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -5,21 +5,26 @@ function Conversations() {
   let { chats } = useConversationContext();
   console.log(chats);
   chats = chats?.map((chat) => {
-    const participants = chat.isGroupChat
+    const participantsIds = chat.isGroupChat
       ? chat.participants.map((p) => p._id)
-      : chat.participants[0];
-    const groupChatName = chat.isGroupChat ? chat.groupChatName : "";
+      : [chat.participants[0]._id];
+    const participants = chat.participants;
     const lastMessage = chat.messages[0] || "";
     const id = chat._id;
     const lastMessageTime = chat.updatedAt;
-
+    const chatName = chat.isGroupChat
+      ? chat.groupChatName
+      : participants[0].fullName;
     return {
       _id: id,
-      receiverId: chat.isGroupChat ? participants : participants._id,
-      isGroupChat: chat.isGroupChat,
-      chatName: chat.isGroupChat ? chat.groupChatName : participants.fullName,
+      receiverIds: participantsIds,
       participants,
-      profilePic: chat.isGroupChat ? groupProfilePic : participants.profilePic,
+      groupAdmin: chat.groupAdmin,
+      isGroupChat: chat.isGroupChat,
+      chatName,
+      profilePic: chat.isGroupChat
+        ? groupProfilePic
+        : participants[0].profilePic,
       lastMessage: lastMessage.message ? lastMessage.message : lastMessage,
       lastMessageTime,
     };
