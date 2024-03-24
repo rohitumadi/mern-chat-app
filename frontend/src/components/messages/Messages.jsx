@@ -18,7 +18,6 @@ function Messages() {
     },
     [messages]
   );
-  console.count("Messages called");
   return (
     <div className="px-4  overflow-auto">
       {getMessagesLoading &&

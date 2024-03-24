@@ -1,7 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { useConversationContext } from "../context/ConversationContext";
-import toast from "react-hot-toast";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { useGetChats } from "./useGetChats";
 
 export function useRenameGroupChat() {
@@ -30,7 +29,6 @@ export function useRenameGroupChat() {
 
       toast.success("Group chat updated successfully");
       refetch();
-      // dispatch({ type: "groupChat/created", payload: json });
     } catch (error) {
       console.log("Error while creating group chat", error.message);
       toast.error(error.message);

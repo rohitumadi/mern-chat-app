@@ -1,10 +1,10 @@
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useConversationContext } from "../context/ConversationContext";
+import { useGetChats } from "./useGetChats";
 
 export function useCreateGroupChat() {
   const navigate = useNavigate();
-  const { dispatch } = useConversationContext();
+  const { refetch } = useGetChats();
   async function createGroupChat(data) {
     try {
       const res = await fetch("/api/group/", {
@@ -22,7 +22,7 @@ export function useCreateGroupChat() {
       if (json.error) {
         throw new Error(json.error);
       }
-      dispatch({ type: "groupChat/created", payload: json });
+      refetch();
     } catch (error) {
       console.log("Error while creating group chat", error.message);
       toast.error(error.message);

@@ -2,7 +2,6 @@ import toast from "react-hot-toast";
 
 export async function getChats() {
   try {
-    console.count("getChats called");
     const res = await fetch("/api/messages");
     const rateLimitRemaining = res.headers.get("X-RateLimit-Remaining");
     if (rateLimitRemaining === "1") {

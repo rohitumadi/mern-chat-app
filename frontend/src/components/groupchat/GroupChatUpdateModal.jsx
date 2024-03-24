@@ -10,7 +10,7 @@ import User from "../users/User";
 import UserBadge from "./UserBadge";
 
 function GroupChatUpdateModal() {
-  const { selectedConversation } = useConversationContext();
+  const { selectedConversation, dispatch } = useConversationContext();
   const { addUserToGroup, addUserLoading } = useAddUserToGroup();
   const { removeUserFromGroup } = useRemoveUserFromGroup();
   const { authUser } = useAuthContext();
@@ -70,6 +70,7 @@ function GroupChatUpdateModal() {
       },
       "leave"
     );
+    dispatch({ type: "groupChat/left" });
   }
 
   return (
