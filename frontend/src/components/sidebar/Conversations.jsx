@@ -1,8 +1,8 @@
-import { useConversationContext } from "../../context/ConversationContext";
-import Conversation from "./Conversation";
 import { groupProfilePic } from "../../../public/img/groupChatPic";
+import { useGetChats } from "../../hooks/useGetChats";
+import Conversation from "./Conversation";
 function Conversations() {
-  let { chats } = useConversationContext();
+  let { chats } = useGetChats();
   chats = chats?.map((chat) => {
     const participantsIds = chat.isGroupChat
       ? chat.participants.map((p) => p._id)
@@ -28,7 +28,7 @@ function Conversations() {
       lastMessageTime,
     };
   });
-  chats = chats.sort(
+  chats = chats?.sort(
     (a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
   );
   return (

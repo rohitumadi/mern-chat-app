@@ -6,7 +6,7 @@ import { useGetChats } from "./useGetChats";
 export function useCreateSingleChat() {
   const navigate = useNavigate();
   const { dispatch } = useConversationContext();
-  const { getChats } = useGetChats();
+  const { refetch } = useGetChats();
   async function createSingleChat(data) {
     try {
       //call create chat api
@@ -27,7 +27,7 @@ export function useCreateSingleChat() {
       }
 
       // get new chats api
-      getChats();
+      refetch();
       //set selected chat to new chat
       dispatch({ type: "chat/created", payload: json });
     } catch (error) {

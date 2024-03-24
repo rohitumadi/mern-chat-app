@@ -2,31 +2,31 @@ import { createContext, useContext, useReducer } from "react";
 export const ConversationContext = createContext();
 
 const initialState = {
-  chats: [],
+  // chats: [],
   selectedConversation: null,
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case "chats/loaded":
-      // update selected conversation when chat is selected and new chat is loaded
-      if (state.selectedConversation !== null) {
-        const updatedSelectedConversation = action.payload.find(
-          (chat) => chat._id === state.selectedConversation._id
-        );
-        updatedSelectedConversation.receiverIds =
-          updatedSelectedConversation.isGroupChat
-            ? updatedSelectedConversation.participants.map((p) => p._id)
-            : [updatedSelectedConversation.participants[0]._id];
-        return {
-          ...state,
-          chats: action.payload,
-          selectedConversation: updatedSelectedConversation,
-        };
-      }
-      return { ...state, chats: action.payload };
-    case "groupChat/created":
-      return { ...state, chats: [...state.chats, action.payload] };
+    // case "chats/loaded":
+    //   // update selected conversation when chat is selected and new chat is loaded
+    //   if (state.selectedConversation !== null) {
+    //     const updatedSelectedConversation = action.payload.find(
+    //       (chat) => chat._id === state.selectedConversation._id
+    //     );
+    //     updatedSelectedConversation.receiverIds =
+    //       updatedSelectedConversation.isGroupChat
+    //         ? updatedSelectedConversation.participants.map((p) => p._id)
+    //         : [updatedSelectedConversation.participants[0]._id];
+    //     return {
+    //       ...state,
+    //       chats: action.payload,
+    //       selectedConversation: updatedSelectedConversation,
+    //     };
+    //   }
+    // return { ...state, chats: action.payload };
+    // case "groupChat/created":
+    //   return { ...state, chats: [...state.chats, action.payload] };
 
     case "chat/selected":
       return {
@@ -48,7 +48,7 @@ function reducer(state, action) {
 }
 
 export function ConversationContextProvider({ children }) {
-  const [{ chats, selectedConversation }, dispatch] = useReducer(
+  const [{ selectedConversation }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -56,9 +56,7 @@ export function ConversationContextProvider({ children }) {
   return (
     <ConversationContext.Provider
       value={{
-        chats,
         selectedConversation,
-
         dispatch,
       }}
     >

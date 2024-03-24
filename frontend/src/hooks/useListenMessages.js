@@ -7,26 +7,25 @@ import { useMessageContext } from "../context/MessageContext";
 export function useListenMessages() {
   const { socket } = useSocketContext();
   const { selectedConversation } = useConversationContext();
-  const { messages, dispatch } = useMessageContext();
-  const { getChats } = useGetChats();
+  const { dispatch } = useMessageContext();
+  const { refetch } = useGetChats();
   useEffect(
     function () {
       socket?.on("newMessage", (newMessage) => {
         newMessage.shouldShake = true;
-
         const isSelectedReceiverId =
           selectedConversation?._id === newMessage.chatId;
         if (!isSelectedReceiverId) {
-          getChats();
+          refetch();
           return;
         }
-        getChats();
+        refetch();
 
         dispatch({ type: "message/received", payload: newMessage });
       });
 
       return () => socket?.off("newMessage");
     },
-    [messages, socket, selectedConversation, dispatch, getChats]
+    [socket, selectedConversation, dispatch, refetch]
   );
 }

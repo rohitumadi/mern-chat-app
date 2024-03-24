@@ -6,7 +6,7 @@ import { useGetChats } from "./useGetChats";
 
 export function useRenameGroupChat() {
   const navigate = useNavigate();
-  const { getChats } = useGetChats();
+  const { refetch } = useGetChats();
   const [renameLoading, setRenameLoading] = useState(false);
   async function renameGroupChat(data) {
     const { groupId } = data;
@@ -29,7 +29,7 @@ export function useRenameGroupChat() {
       }
 
       toast.success("Group chat updated successfully");
-      getChats();
+      refetch();
       // dispatch({ type: "groupChat/created", payload: json });
     } catch (error) {
       console.log("Error while creating group chat", error.message);

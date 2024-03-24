@@ -14,6 +14,7 @@ export function useGetMessages() {
     function () {
       async function getMessages() {
         try {
+          console.count("getMessages called");
           setGetMessagesLoading(true);
           const chatId = selectedConversation._id;
           const res = await fetch(`/api/messages/${chatId}`);

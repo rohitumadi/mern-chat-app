@@ -9,7 +9,7 @@ export function useSendMessage() {
   const navigate = useNavigate();
   const { selectedConversation } = useConversationContext();
   const { dispatch } = useMessageContext();
-  const { getChats } = useGetChats();
+  const { refetch } = useGetChats();
   const [sendMessageLoading, setSendMessageLoading] = useState(false);
 
   async function sendMessage(message) {
@@ -34,7 +34,7 @@ export function useSendMessage() {
       }
       dispatch({ type: "message/sent", payload: data });
 
-      getChats();
+      refetch();
     } catch (error) {
       console.error("Error while sending message", error.message);
       toast.error(error.message);

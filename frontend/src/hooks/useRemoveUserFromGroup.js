@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 
 export function useRemoveUserFromGroup() {
   const navigate = useNavigate();
-  const { getChats } = useGetChats();
+  const { refetch } = useGetChats();
   const [removeUserLoading, setRemoveUserLoading] = useState(false);
 
   async function removeUserFromGroup(data, action) {
@@ -27,7 +27,7 @@ export function useRemoveUserFromGroup() {
       if (json.error) {
         throw new Error(json.error);
       }
-      getChats();
+      refetch();
       if (action === "leave") {
         toast.success("You left the group");
         document.getElementById("my_modal_4").close();

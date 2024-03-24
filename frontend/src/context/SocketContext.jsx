@@ -17,7 +17,7 @@ export function SocketContextProvider({ children }) {
       if (authUser) {
         //https://chat-app-prod-5crw.onrender.com/
         //http://localhost:8000
-        const URL = "https://chat-app-prod-5crw.onrender.com/";
+        const URL = "http://localhost:8000";
         const socket = io(URL, {
           query: { userId: authUser._id },
         });

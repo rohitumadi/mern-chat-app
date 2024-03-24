@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 
 export function useAddUserToGroup() {
   const navigate = useNavigate();
-  const { getChats } = useGetChats();
+  const { refetch } = useGetChats();
   const [addUserLoading, setAddUserLoading] = useState(false);
 
   async function addUserToGroup(data) {
@@ -29,7 +29,7 @@ export function useAddUserToGroup() {
       }
 
       toast.success("User added successfully");
-      getChats();
+      refetch();
     } catch (error) {
       console.log("Error while adding user to group chat", error.message);
       toast.error(error.message);
