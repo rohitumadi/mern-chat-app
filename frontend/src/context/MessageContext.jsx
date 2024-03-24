@@ -14,11 +14,13 @@ function reducer(state, action) {
         messages: action.payload,
       };
     case "message/received":
+      console.log("message received");
       return {
         ...state,
         messages: [...state.messages, action.payload],
       };
     case "message/sent": {
+      console.log("message sent");
       return {
         ...state,
         messages: [...state.messages, action.payload],

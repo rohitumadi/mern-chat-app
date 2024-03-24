@@ -3,9 +3,11 @@ import { useConversationContext } from "../context/ConversationContext";
 import { useSocketContext } from "../context/SocketContext";
 import { useGetChats } from "./useGetChats";
 import { useMessageContext } from "../context/MessageContext";
+import { useAuthContext } from "../context/AuthContext";
 
 export function useListenMessages() {
   const { socket } = useSocketContext();
+  const { authUser } = useAuthContext();
   const { selectedConversation } = useConversationContext();
   const { dispatch } = useMessageContext();
   const { refetch } = useGetChats();
@@ -14,6 +16,7 @@ export function useListenMessages() {
       socket?.on("newMessage", (newMessage) => {
         newMessage.shouldShake = true;
         const isSelectedReceiverId =
+          newMessage.senderId !== authUser._id &&
           selectedConversation?._id === newMessage.chatId;
         if (!isSelectedReceiverId) {
           refetch();
@@ -26,6 +29,6 @@ export function useListenMessages() {
 
       return () => socket?.off("newMessage");
     },
-    [socket, selectedConversation, dispatch, refetch]
+    [socket, selectedConversation, dispatch, refetch, authUser]
   );
 }
