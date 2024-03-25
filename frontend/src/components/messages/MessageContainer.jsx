@@ -1,8 +1,8 @@
 import { useEffect } from "react";
+import { groupProfilePic } from "../../../public/img/groupChatPic";
 import { useConversationContext } from "../../context/ConversationContext";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
-import { groupProfilePic } from "../../../public/img/groupChatPic";
 
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
@@ -18,7 +18,6 @@ function MessageContainer() {
       dispatch({ type: "chat/selected", payload: null });
     };
   }, [dispatch]);
-
   if (!selectedConversation) return <NoChatSelected />;
   return (
     <div className="flex flex-1 flex-col md:min-w-[450px]">

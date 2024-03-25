@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useMessageContext } from "../../context/MessageContext";
 import { useGetMessages } from "../../hooks/useGetMessages";
 import MessageSkeleton from "../skeletons/MessageSkeleton";
@@ -36,4 +36,4 @@ function Messages() {
   );
 }
 
-export default Messages;
+export default React.memo(Messages);
